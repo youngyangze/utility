@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
+#include <process.h>
 #include <random>
 #include <windows.h>
-#include <process.h>
 
 using namespace std;
+
+#define fastio ios::sync_with_stdio(false), cin.tie(NULL)
 
 /*
 variableName
@@ -14,8 +16,7 @@ attribute_name
 */
 
 namespace utility {
-    template <typename T>
-    int printVector(vector<T> vec) {
+    template <typename T> int printVector(vector<T> vec) {
         if (vec.empty()) {
             return -1;
         }
@@ -29,8 +30,7 @@ namespace utility {
         }
         return 1;
     }
-    template <typename T>
-    bool isSorted(vector<T> vec) {
+    template <typename T> bool isSorted(vector<T> vec) {
         vector<T> sorted = vec;
         sort(sorted.begin(), sorted.end());
         return sorted == vec;
@@ -70,7 +70,7 @@ namespace utility {
 
         return randomVector;
     }
-}
+} // namespace utility
 
 namespace ultimateSort {
     void countSort(vector<int>* vec) {
@@ -222,14 +222,96 @@ namespace ultimateSort {
             vec[i] = sum;
         }
     }
-}
+} // namespace ultimateSort
+
+typedef complex<double> cpx;
+namespace lab {
+    void FFT(vector<cpx>& vec, bool inv) {
+        int len = vec.size();
+
+        for (int i = 1, j = 0; i < len; i++) {
+            int bit = len / 2;
+
+            while (j >= bit) {
+                j -= bit;
+                bit /= 2;
+            }
+            j += bit;
+
+            if (i < j) {
+                swap(vec[i], vec[j]);
+            }
+        }
+
+        for (int k = 1; k < len; k *= 2) {
+            double angle = (inv ? acos(-1) / k : -acos(-1) / k);
+            cpx w(cos(angle), sin(angle));
+
+            for (int i = 0; i < len; i += k * 2) {
+                cpx z(1, 0);
+
+                for (int j = 0; j < k; j++) {
+                    cpx even = vec[i + j];
+                    cpx odd = vec[i + j + k];
+
+                    vec[i + j] = even + z * odd;
+                    vec[i + j + k] = even - z * odd;
+
+                    z *= w;
+                }
+            }
+        }
+
+        if (inv) {
+            for (int i = 0; i < len; i++) {
+                vec[i] /= len;
+            }
+        }
+    }
+    vector<int> mul(vector<int>& vec, vector<int>& vec2) {
+        vector<cpx> vc(vec.begin(), vec.end());
+        vector<cpx> uc(vec2.begin(), vec2.end());
+
+        int n = 2;
+        while (n < vec.size() + vec2.size())
+            n *= 2;
+
+        vc.resize(n);
+        FFT(vc, false);
+        uc.resize(n);
+        FFT(uc, false);
+
+        for (int i = 0; i < n; i++)
+            vc[i] *= uc[i];
+        FFT(vc, true);
+
+        vector<int> w(n);
+        for (int i = 0; i < n; i++)
+            w[i] = round(vc[i].real());
+
+        return w;
+    }
+} // namespace lab
 
 int main() {
+    fastio;
+
     vector<int> a = utility::generateRandomVector(50, 1, 50, true);
     utility::printVector(a);
     ultimateSort::beadSort(a);
     utility::printVector(a);
     cout << utility::isSorted(a) << '\n';
+
+    int N, M; cin >> N >> M;
+
+    vector<int> v(N), u(M);
+    for (int i = 0; i < N; i++) cin >> v[i];
+    for (int i = 0; i < M; i++) cin >> u[i];
+
+    vector<int> w = lab::mul(v, u);
+
+    for (int i = 0; i < v.size() + u.size() - 1; i++) cout << w[i] << " ";
+    cout << "\n";
 
     return 0;
 }
