@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 #include <random>
+#include <windows.h>
+#include <process.h>
 
 using namespace std;
 
@@ -106,19 +108,6 @@ namespace ultimateSort {
             shuffle(vec->begin(), vec->end(), gen);
         }
     }
-    /*
-    * for i in range(len(arr)):
-
-    # 가장 작은 값을 저장할 변수에 i를 초기화
-        min_idx = i
-        for j in range(i + 1, len(arr)):
-        # 만약 가장 작은 값변수가 다음 인덱스의 값보다 클경우
-            if arr[min_idx] > arr[j]:
-                min_idx = j # 값을 변경
-
-    # 값을 변경
-        arr[i], arr[min_idx] = arr[min_idx], arr[i]
-    */
 
     void selectionSort(vector<int>* vec) {
         if (vec == nullptr || vec->empty()) {
@@ -197,12 +186,48 @@ namespace ultimateSort {
             }
         }
     }
+    void beadSort(vector<int>& vec) {
+        int len = vec.size();
+        int max = vec[0];
+        for (int i = 1; i < len; i++) {
+            if (vec[i] > max) {
+                max = vec[i];
+            }
+        }
+
+        vector<vector<int>> beads(len, vector<int>(max, 0));
+
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < vec[i]; j++) {
+                beads[i][j] = 1;
+            }
+        }
+
+        for (int j = 0; j < max; j++) {
+            int sum = 0;
+            for (int i = 0; i < len; i++) {
+                sum += beads[i][j];
+                beads[i][j] = 0;
+            }
+            for (int i = len - 1; i >= len - sum; i--) {
+                beads[i][j] = 1;
+            }
+        }
+
+        for (int i = 0; i < len; i++) {
+            int sum = 0;
+            for (int j = 0; j < max; j++) {
+                sum += beads[i][j];
+            }
+            vec[i] = sum;
+        }
+    }
 }
 
 int main() {
     vector<int> a = utility::generateRandomVector(50, 1, 50, true);
     utility::printVector(a);
-    ultimateSort::heapSort(a);
+    ultimateSort::beadSort(a);
     utility::printVector(a);
     cout << utility::isSorted(a) << '\n';
 
