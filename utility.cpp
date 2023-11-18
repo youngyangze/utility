@@ -15,6 +15,37 @@ ConstantName
 attribute_name
 */
 
+/*
+void dfs(int start, vector<vector<int>>& graph, vector<bool>& visited) {
+    cout << start << ' ';
+    visited[start] = true;
+    for (int next : graph[start]) {
+        if (!visited[next]) {
+            dfs(next, graph, visited);
+        }
+    }
+}
+
+void bfs(int start, vector<vector<int>>& graph, vector<bool>& visited) {
+    queue<int> queue;
+    queue.push(start);
+    visited[start] = true;
+
+    while (!queue.empty()) {
+        int current = queue.front();
+        queue.pop();
+        cout << current << ' ';
+
+        for (int next : graph[current]) {
+            if (!visited[next]) {
+                queue.push(next);
+                visited[next] = true;
+            }
+        }
+    }
+}
+*/
+
 namespace utility {
     template <typename T> int printVector(vector<T> vec) {
         if (vec.empty()) {
