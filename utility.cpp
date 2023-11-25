@@ -46,6 +46,27 @@ void bfs(int start, vector<vector<int>>& graph, vector<bool>& visited) {
 }
 */
 
+/*
+template <typename T>
+T binarySearch(vector<T> &vec, T target) {
+    T low = 0, mid = 0, high = vec.size() - 1;
+
+    while (low <= high) {
+        mid = (low + high) / 2;
+
+        if (target < vec[mid]) {
+            high = mid - 1;
+        } else if (target > vec[mid]) {
+            low = mid + 1;
+        } else {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+*/
+
 namespace utility {
     template <typename T> int printVector(vector<T> vec) {
         if (vec.empty()) {
