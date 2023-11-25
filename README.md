@@ -2,9 +2,39 @@
 메모용
 
 ## includes
-+ ultimateSort
-+ utility
-+ lab (구)testing
+
+<details>
+<summary>**utility**</summary>
+  
+  + dfs
+  + bfs
+  + binarySearch
+  + floydWarshall
+  + lowerBound
+  + upperBound
+  + printVector
+  + isSorted
+  + generateRandomVector
+</details>
+
+<details>
+<summary>**utility**</summary>
+
++ countSort
++ bogoSort
++ selectionSort
++ heapify
++ heapSort
++ insertionSort
++ bubbleSort
++ beadSort
+</details>
+<details>
+<summary>**lab (구)testing**</summary>
+
++ FFT
++ mul
+</details>
 
 ## change logs
 v1.0: released.
