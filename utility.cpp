@@ -6,6 +6,9 @@
 using namespace std;
 
 #define fastio ios::sync_with_stdio(false), cin.tie(NULL)
+#define ll long long
+
+const int INF = 1e9;
 
 /*
 variableName
@@ -15,59 +18,105 @@ ConstantName
 attribute_name
 */
 
-/*
-void dfs(int start, vector<vector<int>>& graph, vector<bool>& visited) {
-    cout << start << ' ';
-    visited[start] = true;
-    for (int next : graph[start]) {
-        if (!visited[next]) {
-            dfs(next, graph, visited);
-        }
-    }
-}
 
-void bfs(int start, vector<vector<int>>& graph, vector<bool>& visited) {
-    queue<int> queue;
-    queue.push(start);
-    visited[start] = true;
-
-    while (!queue.empty()) {
-        int current = queue.front();
-        queue.pop();
-        cout << current << ' ';
-
-        for (int next : graph[current]) {
+namespace utility {
+    template <typename T> void dfs(int start, vector<vector<T>>& graph, vector<bool>& visited) {
+        cout << start << ' ';
+        visited[start] = true;
+        for (int next : graph[start]) {
             if (!visited[next]) {
-                queue.push(next);
-                visited[next] = true;
+                dfs(next, graph, visited);
             }
         }
     }
-}
-*/
 
-/*
-template <typename T>
-T binarySearch(vector<T> &vec, T target) {
-    T low = 0, mid = 0, high = vec.size() - 1;
+    template <typename T> void bfs(int start, vector<vector<T>>& graph, vector<bool>& visited) {
+        queue<int> queue;
+        queue.push(start);
+        visited[start] = true;
 
-    while (low <= high) {
-        mid = (low + high) / 2;
+        while (!queue.empty()) {
+            int current = queue.front();
+            queue.pop();
+            cout << current << ' ';
 
-        if (target < vec[mid]) {
-            high = mid - 1;
-        } else if (target > vec[mid]) {
-            low = mid + 1;
-        } else {
-            return 1;
+            for (int next : graph[current]) {
+                if (!visited[next]) {
+                    queue.push(next);
+                    visited[next] = true;
+                }
+            }
         }
     }
 
-    return 0;
-}
-*/
+    template <typename T> T binarySearch(vector<T>& vec, T target) {
+        T low = 0, mid = 0, high = vec.size() - 1;
 
-namespace utility {
+        while (low <= high) {
+            mid = (low + high) / 2;
+
+            if (target < vec[mid]) {
+                high = mid - 1;
+            }
+            else if (target > vec[mid]) {
+                low = mid + 1;
+            }
+            else {
+                return mid;
+            }
+        }
+
+        return -1;
+    }
+
+    template <typename T> void floydWarshall(vector<T>& vec) {
+        ll V = vec.size(); // O(V^3)
+
+        for (ll k = 0; k < V; k++) {
+            for (ll i = 0; i < V; i++) {
+                for (ll j = 0; j < V; j++) {
+                    if (vec[i][k] != INF && vec[k][j] != INF && vec[i][j] > vec[i][k] + vec[k][j]) { // INF는 경로가 존재 하지 않는다는 뜻입니다.
+                        vec[i][j] = vec[i][k] + vec[k][j];
+                    }
+                }
+            }
+        }
+    }
+
+    template <typename T> T lowerBound(vector<T> vec, ll target) {
+        ll begin = 0;
+        ll end = vec.size();
+
+        while (begin < end) {
+            ll mid = (begin + end) / 2;
+
+            if (vec[mid] >= target) {
+                end = mid;
+            }
+            else {
+                begin = mid + 1;
+            }
+        }
+        return end;
+    }
+
+    template <typename T> T upperBound(vector<T> vec, ll target) {
+        ll begin = 0;
+        ll end = vec.size();
+
+        while (begin < end) {
+            ll mid = (begin + end) / 2;
+
+            if (vec[mid] <= target) {
+                begin = mid + 1;
+            }
+            else {
+                end = mid;
+            }
+        }
+        return end;
+    }
+
     template <typename T> int printVector(vector<T> vec) {
         if (vec.empty()) {
             return -1;
@@ -82,11 +131,13 @@ namespace utility {
         }
         return 1;
     }
+
     template <typename T> bool isSorted(vector<T> vec) {
         vector<T> sorted = vec;
         sort(sorted.begin(), sorted.end());
         return sorted == vec;
     }
+
     vector<int> generateRandomVector(int size, int range_start, int range_end,
         bool onlyUniqueNumbers = false) {
         random_device rd;
@@ -346,24 +397,28 @@ namespace lab {
 } // namespace lab
 
 int main() {
-    fastio;
+    vector<vector<int>> graph = {
+        {0, 8, 4, 5, 5},
+        {7, 0, 6, 2, 2},
+        {3, 2, 0, 3, 7},
+        {7, 3, 7, 0, 1},
+        {3, 7, 4, 2, 0}
+    };
+    const int V = graph.size();
 
-    vector<int> a = utility::generateRandomVector(50, 1, 50, true);
-    utility::printVector(a);
-    ultimateSort::beadSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
+    utility::floydWarshall(graph);
 
-    int N, M; cin >> N >> M;
-
-    vector<int> v(N), u(M);
-    for (int i = 0; i < N; i++) cin >> v[i];
-    for (int i = 0; i < M; i++) cin >> u[i];
-
-    vector<int> w = lab::mul(v, u);
-
-    for (int i = 0; i < v.size() + u.size() - 1; i++) cout << w[i] << " ";
-    cout << "\n";
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (graph[i][j] == INF) {
+                cout << "INF ";
+            }
+            else {
+                cout << graph[i][j] << "  ";
+            }
+        }
+        cout << '\n';
+    }
 
     return 0;
 }
