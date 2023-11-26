@@ -39,4 +39,6 @@
 ## change logs
 v1.0: released.
 
-v2023-11-25 PM 09/41: added floydWarshall and dfs, bfs, binarySearch, lower/upperbound
+v2023-11-25 PM 09:41: added floyd warshall and dfs, bfs, binarySearch, lower/upper bound
+
+v2023-11-26 AM 10:39: added flood fill and minority fixed function's input changed dereference(*) to reference(&)
