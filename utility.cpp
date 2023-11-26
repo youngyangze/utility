@@ -9,6 +9,8 @@ using namespace std;
 
 
 typedef long long ll;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
 
 const int INF = 1e9;
 
@@ -137,6 +139,31 @@ namespace utility {
         floodFill4Way(vec, x, y + 1);
         floodFill4Way(vec, x + 1, y);
         */
+    }
+
+    vector<int> dijkstra(const int start, const int V, vector<pii> adj[]) {
+        vector<int> dist(V, INF);
+        priority_queue<pii> pq;
+
+        dist[start] = 0;
+        pq.push(make_pair(0, start));
+
+        while (!pq.empty()) {
+            int cost = -pq.top().first;
+            int cur = pq.top().second;
+            pq.pop();
+
+            for (int i = 0; i < adj[cur].size(); i++) {
+                int next = adj[cur][i].first;
+                int nCost = cost + adj[cur][i].second;
+                if (nCost < dist[next]) {
+                    dist[next] = nCost;
+                    pq.push(make_pair(-nCost, next));
+                }
+            }
+        }
+
+        return dist;
     }
 
     template <typename T> void floodFill8Way(vector<T>& vec, const int x, const int y) {
@@ -446,48 +473,7 @@ int main() {
 
     fastio;
 
-    vector<int> a = utility::generateRandomVector(50, 1, 50, true);
-    cout << "bead sort\n";
-    utility::printVector(a);
-    ultimateSort::beadSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
-    cout << "bubble sort\n";
-    a = utility::generateRandomVector(50, 1, 50, true);
-    utility::printVector(a);
-    ultimateSort::bubbleSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
-    cout << "insertion sort\n";
-    a = utility::generateRandomVector(50, 1, 50, true);
-    utility::printVector(a);
-    ultimateSort::insertionSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
-    cout << "heap sort\n";
-    a = utility::generateRandomVector(50, 1, 50, true);
-    utility::printVector(a);
-    ultimateSort::heapSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
-    cout << "selection sort\n";
-    a = utility::generateRandomVector(50, 1, 50, true);
-    utility::printVector(a);
-    ultimateSort::selectionSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
-    cout << "count sort\n";
-    a = utility::generateRandomVector(50, 1, 50, true);
-    utility::printVector(a);
-    ultimateSort::countSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
-    cout << "bogo sort\n";
-    a = utility::generateRandomVector(5, 1, 5, true);
-    utility::printVector(a);
-    ultimateSort::bogoSort(a);
-    utility::printVector(a);
-    cout << utility::isSorted(a) << '\n';
+    
 
 
     return 0;
