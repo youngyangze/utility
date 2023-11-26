@@ -6,9 +6,13 @@
 using namespace std;
 
 #define fastio ios::sync_with_stdio(false), cin.tie(NULL)
-#define ll long long
+
+
+typedef long long ll;
 
 const int INF = 1e9;
+
+int n, m;
 
 /*
 variableName
@@ -18,10 +22,9 @@ ConstantName
 attribute_name
 */
 
-
 namespace utility {
     template <typename T> void dfs(int start, vector<vector<T>>& graph, vector<bool>& visited) {
-        cout << start << ' ';
+        // cout << start << ' ';
         visited[start] = true;
         for (int next : graph[start]) {
             if (!visited[next]) {
@@ -38,7 +41,7 @@ namespace utility {
         while (!queue.empty()) {
             int current = queue.front();
             queue.pop();
-            cout << current << ' ';
+            // cout << current << ' ';
 
             for (int next : graph[current]) {
                 if (!visited[next]) {
@@ -49,20 +52,18 @@ namespace utility {
         }
     }
 
-    template <typename T> T binarySearch(vector<T>& vec, T target) {
-        T low = 0, mid = 0, high = vec.size() - 1;
+    template <typename T> ll binarySearch(vector<T>& vec, const ll target) {
+        ll low = 0, mid = 0, high = vec.size() - 1;
 
         while (low <= high) {
             mid = (low + high) / 2;
 
             if (target < vec[mid]) {
                 high = mid - 1;
-            }
-            else if (target > vec[mid]) {
+            } else if (target > vec[mid]) {
                 low = mid + 1;
-            }
-            else {
-                return mid;
+            } else {
+                return mid; // mid = index of target
             }
         }
 
@@ -83,7 +84,7 @@ namespace utility {
         }
     }
 
-    template <typename T> T lowerBound(vector<T> vec, ll target) {
+    template <typename T> ll lowerBound(vector<T> vec, const ll target) {
         ll begin = 0;
         ll end = vec.size();
 
@@ -92,15 +93,14 @@ namespace utility {
 
             if (vec[mid] >= target) {
                 end = mid;
-            }
-            else {
+            } else {
                 begin = mid + 1;
             }
         }
         return end;
     }
 
-    template <typename T> T upperBound(vector<T> vec, ll target) {
+    template <typename T> ll upperBound(vector<T> vec, ll target) {
         ll begin = 0;
         ll end = vec.size();
 
@@ -109,12 +109,57 @@ namespace utility {
 
             if (vec[mid] <= target) {
                 begin = mid + 1;
-            }
-            else {
+            } else {
                 end = mid;
             }
         }
         return end;
+    }
+
+    template <typename T> void floodFill4Way(vector<T>& vec, const int x, const int y) { // n은 가로, m은 세로의 길이
+        const vector<int> dx = { -1, 0, 1 };
+        const vector<int> dy = { -1, 0, 1 };
+
+        if (x < 1 || x > n || y < 1 || y > m || vec[x][y]) {
+            return;
+        }
+        vec[x][y] = 1;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i != 1 || j != 1) {
+                    floodFill4Way(vec, x + dx[i], y + dy[j]);
+                } // if문은 생략할 수 있음
+            }
+        }
+        /*
+        floodFill4Way(vec, x - 1, y);
+        floodFill4Way(vec, x, y - 1);
+        floodFill4Way(vec, x, y + 1);
+        floodFill4Way(vec, x + 1, y);
+        */
+    }
+
+    template <typename T> void floodFill8Way(vector<T>& vec, const int x, const int y) {
+        const vector<int> dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        const vector<int> dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
+        if (x < 1 || x > n || y < 1 || y > m || vec[x][y]) {
+            return;
+        }
+        vec[x][y] = 1;
+        for (int i = 0; i < 8; i++) {
+            floodFill8Way(vec, x + dx[i], y + dy[i]);
+        }
+        /*
+        floodFill8Way(x - 1, y - 1);
+        floodFill8Way(x - 1, y);
+        floodFill8Way(x - 1, y + 1);
+        floodFill8Way(x, y - 1);
+        floodFill8Way(x, y + 1);
+        floodFill8Way(x + 1, y - 1);
+        floodFill8Way(x + 1, y);
+        floodFill8Way(x + 1, y + 1);
+        */
     }
 
     template <typename T> int printVector(vector<T> vec) {
@@ -138,8 +183,7 @@ namespace utility {
         return sorted == vec;
     }
 
-    vector<int> generateRandomVector(int size, int range_start, int range_end,
-        bool onlyUniqueNumbers = false) {
+    vector<int> generateRandomVector(const int size, const int range_start, const int range_end, const bool onlyUniqueNumbers = false) {
         random_device rd;
         mt19937 gen(rd());
         uniform_int_distribution<int> dist(range_start, range_end);
@@ -176,75 +220,61 @@ namespace utility {
 } // namespace utility
 
 namespace ultimateSort {
-    void countSort(vector<int>* vec) {
-        if (vec == nullptr || vec->empty()) {
-            return;
-        }
-
-        int maxVal = *max_element(vec->begin(), vec->end());
-        int minVal = *min_element(vec->begin(), vec->end());
+    void countSort(vector<int>& vec) {
+        int maxVal = *max_element(vec.begin(), vec.end());
+        int minVal = *min_element(vec.begin(), vec.end());
 
         vector<int> buckets(maxVal - minVal + 1, 0);
 
-        for (int i = 0; i < vec->size(); i++) {
-            buckets[(*vec)[i] - minVal]++;
+        for (int i = 0; i < vec.size(); i++) {
+            buckets[vec[i] - minVal]++;
         }
 
         int index = 0;
         for (int i = 0; i < buckets.size(); i++) {
             while (buckets[i] > 0) {
-                (*vec)[index] = i + minVal;
+                vec[index] = i + minVal;
                 index++;
                 buckets[i]--;
             }
         }
     }
 
-    void bogoSort(vector<int>* vec) {
-        if (vec == nullptr || vec->empty()) {
-            return;
-        }
-
-        while (!utility::isSorted(*vec)) {
+    void bogoSort(vector<int>& vec) {
+        while (!utility::isSorted(vec)) {
             random_device rd;
             mt19937 gen(rd());
-            shuffle(vec->begin(), vec->end(), gen);
+            shuffle(vec.begin(), vec.end(), gen);
         }
     }
 
-    void selectionSort(vector<int>* vec) {
-        if (vec == nullptr || vec->empty()) {
-            return;
-        }
-
+    void selectionSort(vector<int>& vec) {
         int minIndex;
 
-        for (int i = 0; i < vec->size() - 1; i++) {
+        for (int i = 0; i < vec.size() - 1; i++) {
             minIndex = i;
-            for (int j = i + 1; j < vec->size(); j++) {
-                if ((*vec)[minIndex] > (*vec)[j]) {
+            for (int j = i + 1; j < vec.size(); j++) {
+                if (vec[minIndex] > vec[j]) {
                     minIndex = j;
                 }
             }
 
-            swap((*vec)[i], (*vec)[minIndex]);
+            swap(vec[i], vec[minIndex]);
         }
     }
 
-    void heapify(vector<int>& arr, int n, int i) {
-        int largestNumber = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
+    void heapify(vector<int>& vec, const int n, const int i) {
+        int largestNumber = i, left = 2 * i + 1, right = 2 * i + 2;
 
-        if (left < n && arr[left] > arr[largestNumber])
+        if (left < n && vec[left] > vec[largestNumber])
             largestNumber = left;
 
-        if (right < n && arr[right] > arr[largestNumber])
+        if (right < n && vec[right] > vec[largestNumber])
             largestNumber = right;
 
         if (largestNumber != i) {
-            swap(arr[i], arr[largestNumber]);
-            heapify(arr, n, largestNumber);
+            swap(vec[i], vec[largestNumber]);
+            heapify(vec, n, largestNumber);
         }
     }
 
@@ -260,28 +290,20 @@ namespace ultimateSort {
         }
     }
 
-    void insertionSort(vector<int>* vec) {
-        if (vec == nullptr || vec->empty()) {
-            return;
-        }
-
-        for (int i = 1; i < vec->size(); i++) {
-            int val = (*vec)[i];
+    void insertionSort(vector<int>& vec) {
+        for (int i = 1; i < vec.size(); i++) {
+            int val = vec[i];
             int n = i;
-            while (n > 0 && (*vec)[n - 1] > val) {
-                (*vec)[n] = (*vec)[n - 1];
+            while (n > 0 && vec[n - 1] > val) {
+                vec[n] = vec[n - 1];
                 n -= 1;
             }
-            (*vec)[n] = val;
+            vec[n] = val;
         }
     }
 
-    void bubbleSort(vector<int>* vec) {
-        if (vec == nullptr || vec->empty()) {
-            return;
-        }
-
-        for (int i = vec->size() - 1; i > 0; i--) {
+    void bubbleSort(vector<int>& vec) {
+        for (int i = vec.size() - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
                 if (vec[j] > vec[j + 1]) {
                     swap(vec[j], vec[j + 1]);
@@ -397,6 +419,7 @@ namespace lab {
 } // namespace lab
 
 int main() {
+    /*
     vector<vector<int>> graph = {
         {0, 8, 4, 5, 5},
         {7, 0, 6, 2, 2},
@@ -419,6 +442,53 @@ int main() {
         }
         cout << '\n';
     }
+    */
+
+    fastio;
+
+    vector<int> a = utility::generateRandomVector(50, 1, 50, true);
+    cout << "bead sort\n";
+    utility::printVector(a);
+    ultimateSort::beadSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+    cout << "bubble sort\n";
+    a = utility::generateRandomVector(50, 1, 50, true);
+    utility::printVector(a);
+    ultimateSort::bubbleSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+    cout << "insertion sort\n";
+    a = utility::generateRandomVector(50, 1, 50, true);
+    utility::printVector(a);
+    ultimateSort::insertionSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+    cout << "heap sort\n";
+    a = utility::generateRandomVector(50, 1, 50, true);
+    utility::printVector(a);
+    ultimateSort::heapSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+    cout << "selection sort\n";
+    a = utility::generateRandomVector(50, 1, 50, true);
+    utility::printVector(a);
+    ultimateSort::selectionSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+    cout << "count sort\n";
+    a = utility::generateRandomVector(50, 1, 50, true);
+    utility::printVector(a);
+    ultimateSort::countSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+    cout << "bogo sort\n";
+    a = utility::generateRandomVector(5, 1, 5, true);
+    utility::printVector(a);
+    ultimateSort::bogoSort(a);
+    utility::printVector(a);
+    cout << utility::isSorted(a) << '\n';
+
 
     return 0;
 }
