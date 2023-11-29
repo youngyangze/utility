@@ -54,7 +54,7 @@ v2023-11-25 PM 09:41: added floyd warshall and dfs, bfs, binarySearch, lower/upp
 
 v2023-11-26 AM 10:39: added flood fill and minority fixed function's input changed dereference(*) to reference(&)
 
-v2023-11-26 PM 08:00: finally dijkstar real
+v2023-11-26 PM 08:00: finally dijkstra real
 
 v2023-11-29 PM 4:23: added prefixSum + getPrefixSumBetween
 
