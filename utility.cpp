@@ -204,6 +204,22 @@ namespace utility {
         return 1;
     }
 
+    template <typename T> void prefixSum(const vector<T>& vec, vector<T>& outputVec) {
+        if (vec.size() == 0) {
+            return;
+        }
+
+        outputVec[0] = vec[0];
+
+        for (int i = 1; i < vec.size(); i++) {
+            outputVec[i] = outputVec[i - 1] + vec[i];
+        }
+    }
+
+    template <typename T> T getPrefixSumBetween(vector<T> vec, ll startIndex, ll endIndex) {
+        return vec[endIndex] - vec[startIndex - 1];
+    }
+
     template <typename T> bool isSorted(vector<T> vec) {
         vector<T> sorted = vec;
         sort(sorted.begin(), sorted.end());
@@ -446,35 +462,14 @@ namespace lab {
 } // namespace lab
 
 int main() {
-    /*
-    vector<vector<int>> graph = {
-        {0, 8, 4, 5, 5},
-        {7, 0, 6, 2, 2},
-        {3, 2, 0, 3, 7},
-        {7, 3, 7, 0, 1},
-        {3, 7, 4, 2, 0}
-    };
-    const int V = graph.size();
-
-    utility::floydWarshall(graph);
-
-    for (int i = 0; i < V; i++) {
-        for (int j = 0; j < V; j++) {
-            if (graph[i][j] == INF) {
-                cout << "INF ";
-            }
-            else {
-                cout << graph[i][j] << "  ";
-            }
-        }
-        cout << '\n';
-    }
-    */
-
     fastio;
+    vector<int> A = { 0,1,2,3,4,5,6,7 };;
+    vector<int> B(A.size(), 0);
 
-    
-
+    utility::printVector(A);
+    utility::prefixSum(A, B);
+    cout << utility::getPrefixSumBetween(B, 5, 7) << endl;
+    utility::printVector(B);
 
     return 0;
 }
