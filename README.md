@@ -30,6 +30,7 @@
 + mul
 </details>
 
+<details>
 <summary>**algorithm**</summary>
 
 + dfs
