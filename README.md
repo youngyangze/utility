@@ -5,20 +5,14 @@
 
 <details>
 <summary>**utility**</summary>
-  
-  + dfs
-  + bfs
-  + binarySearch
-  + floydWarshall
-  + lowerBound
-  + upperBound
+
   + printVector
   + isSorted
   + generateRandomVector
 </details>
 
 <details>
-<summary>**utility**</summary>
+<summary>**ultimateSort**</summary>
 
 + countSort
 + bogoSort
@@ -28,17 +22,27 @@
 + insertionSort
 + bubbleSort
 + beadSort
-+ djikstra
-+ floodFill4Way
-+ floodFill8Way
-+ prefixSum
-+ getPrefixSumBetween
 </details>
 <details>
 <summary>**lab (구)testing**</summary>
 
 + FFT
 + mul
+</details>
+
+<summary>**algorithm**</summary>
+
++ dfs
++ bfs
++ binarySearch
++ floydWarshall
++ lowerBound
++ upperBound
++ djikstra
++ floodFill4Way
++ floodFill8Way
++ prefixSum
++ getPrefixSumBetween
 </details>
 
 ## change logs
@@ -51,3 +55,5 @@ v2023-11-26 AM 10:39: added flood fill and minority fixed function's input chang
 v2023-11-26 PM 08:00: finally dijkstar real
 
 v2023-11-29 PM 4:23: added prefixSum + getPrefixSumBetween
+
+v2023-11-29 PM 4:55: emergently moved algorithm things into algorithm
