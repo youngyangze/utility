@@ -465,6 +465,23 @@ namespace algorithm {
     template <typename T> T getPrefixSumBetween(vector<T> vec, ll startIndex, ll endIndex) {
         return vec[endIndex] - vec[startIndex - 1];
     }
+
+    typedef struct Point {
+        ll x, y;
+    } point;
+
+    ll ccw(point& p1, point& p2, point& p3) {
+        ll result = (p1.x * p2.y + p2.x * p3.y + p3.x * p1.y) - (p1.y * p2.x + p2.y * p3.x + p3.y * p1.x);
+
+        // result가 0보다 작으면 CCW, 0이면 일직선, 0보다 크면 CW
+        if (result > 0) {
+            return 1;
+        } else if (result < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 }
 
 int main() {
