@@ -45,6 +45,7 @@
 + floodFill8Way
 + prefixSum
 + getPrefixSumBetween
++ CCW
 </details>
 
 ## change logs
@@ -61,3 +62,5 @@ v2023-11-29 PM 4:23: added prefixSum + getPrefixSumBetween
 v2023-11-29 PM 4:55: emergently moved algorithm things into algorithm
 
 v2023-11-29 PM 7:33: deleted duplicated thing on utility
+
+v2023-12-23 PM 9:43: created CCW 'cause 1 + 1 is 2
