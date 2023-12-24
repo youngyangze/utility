@@ -337,8 +337,11 @@ namespace algorithm {
         for (ll k = 0; k < V; k++) {
             for (ll i = 0; i < V; i++) {
                 for (ll j = 0; j < V; j++) {
-                    if (vec[i][k] != INF && vec[k][j] != INF && vec[i][j] > vec[i][k] + vec[k][j]) { // INF는 경로가 존재 하지 않는다는 뜻입니다.
+                    /*if (vec[i][k] != INF && vec[k][j] != INF && vec[i][j] > vec[i][k] + vec[k][j]) { // INF는 경로가 존재 하지 않는다는 뜻입니다.
                         vec[i][j] = vec[i][k] + vec[k][j];
+                    }*/
+                    if (vec[i][k] && vec[k][j]) {
+                        vec[i][j] = 1;
                     }
                 }
             }
