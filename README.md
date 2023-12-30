@@ -46,6 +46,8 @@
 + prefixSum
 + getPrefixSumBetween
 + CCW
++ distance
++ convexHull
 </details>
 
 ## change logs
@@ -64,5 +66,7 @@ v2023-11-29 PM 4:55: emergently moved algorithm things into algorithm
 v2023-11-29 PM 7:33: deleted duplicated thing on utility
 
 v2023-12-23 PM 9:43: created CCW 'cause 1 + 1 is 2
+
+v2023-12-30 AM 11:31: created Convex Hull and distance and Point struct
 
 v2023-12-24 PM 4:06: fixed floyd warshall
