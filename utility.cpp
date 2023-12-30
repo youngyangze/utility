@@ -4,15 +4,23 @@
 #include <windows.h>
 
 using namespace std;
+using ll = long long;
+using vint = vector<int>;
+using matrix = vector<vint>;
+using vll = vector<ll>;
+using matrlx = vector<vll>;
+using pii = pair<int, int>;
+using dbl = deque<bool>;
+using dbltrix = deque<dbl>;
+using pll = pair<ll, ll>;
+
+#define fastio ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL)
+#define endl '\n'
+#define _CRT_SECURE_NO_WARNINGS
 
 #define fastio ios::sync_with_stdio(false), cin.tie(NULL)
 
-
-typedef long long ll;
-typedef pair<int, int> pii;
-typedef pair<ll, ll> pll;
-
-const int INF = 1e9;
+const int INF = INT_MAX;
 
 int n, m;
 
@@ -23,6 +31,18 @@ SignalName
 ConstantName
 attribute_name
 */
+
+typedef struct Point {
+    ll x, y;
+} point;
+
+// 기준점을 찾기 위한 비교 함수
+bool compare(point& p1, point& p2) {
+    // 기준점과의 각도가 작은 순서대로 정렬
+    if (p1.y == p2.y)
+        return p1.x < p2.x;
+    return p1.y < p2.y;
+}
 
 namespace utility {
     template <typename T> int printVector(vector<T> vec) {
@@ -484,6 +504,39 @@ namespace algorithm {
         } else {
             return 0;
         }
+    }
+
+    ll distance(point& p1, point& p2) {
+        return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+    }
+
+    // 그레이엄 스캔 알고리즘을 이용한 볼록 껍질 구하기
+    void convexHull(vector<point>& points) {
+        // 기준점 찾기
+        swap(points[0], *min_element(points.begin(), points.end(), compare));
+
+        // 기준점을 제외한 나머지 점들을 기준점과의 각도순으로 정렬
+        sort(points.begin() + 1, points.end(), [&](point& p1, point& p2) {
+        ll result = algorithm::ccw(points[0], p1, p2);
+        if (result == 0) {
+            return algorithm::distance(points[0], p1) < algorithm::distance(points[0], p2);
+        }
+        return result > 0; });
+
+        // 볼록 껍질 구하기
+        vector<point> hull;
+        hull.push_back(points[0]);
+        hull.push_back(points[1]);
+
+        for (ll i = 2; i < points.size(); i++) {
+            while (hull.size() >= 2 && algorithm::CCW(hull[hull.size() - 2], hull[hull.size() - 1], points[i]) <= 0) {
+                hull.pop_back();
+            }
+            hull.push_back(points[i]);
+        }
+
+        // 결과 출력
+        cout << hull.size() << endl;
     }
 }
 
