@@ -538,6 +538,18 @@ namespace algorithm {
         // 결과 출력
         cout << hull.size() << endl;
     }
+
+    int find(vint& parent, int x) {
+        if (parent[x] == x) return x;
+        return parent[x] = find(parent[x]);
+    }
+
+    void unionParent(vint& parent, int a, int b) {
+        a = find(a);
+        b = find(b);
+        if (a < b) parent[b] = a;
+        else parent[a] = b;
+    }
 }
 
 int main() {
