@@ -44,6 +44,46 @@ bool compare(point& p1, point& p2) {
     return p1.y < p2.y;
 }
 
+ll add(ll a, ll b) {
+    while (b != 0) {
+        ll carry = a & b;
+        a = a ^ b;
+        b = carry << 1;
+    }
+    return a;
+}
+
+ll subtract(ll a, ll b) {
+    b = add(~b, 1);
+    return add(a, b);
+}
+
+ll multiply(ll a, ll b) {
+    ll result = 0;
+    while (b != 0) {
+        if (b & 1) {
+            result = add(result, a);
+        }
+        a <<= 1;
+        b >>= 1;
+    }
+    return result;
+}
+
+ll divide(ll a, ll b) {
+    ll quotient = 0;
+    ll remainder = 0;
+    for (int i = 31; i >= 0; --i) {
+        remainder <<= 1;
+        remainder |= (a >> i) & 1;
+        if (remainder >= b) {
+            remainder = subtract(remainder, b);
+            quotient |= (1LL << i);
+        }
+    }
+    return quotient;
+}
+
 namespace utility {
     template <typename T> int printVector(vector<T> vec) {
         if (vec.empty()) {
